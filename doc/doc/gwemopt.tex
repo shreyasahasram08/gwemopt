@@ -124,9 +124,9 @@ For this reason, for future surveys searching for electromagnetic counterparts, 
 The era of multi-messenger gravitational-wave astronomy has arrived with the detection of GW170817 \citep{AbEA2017b} by Advanced LIGO \citep{aLIGO} and Advanced Virgo \citep{adVirgo} coincident with the detection of both a short gamma-ray burst (SGRB) \citep{AbEA2017c,AbEA2017d,AbEA2017e} and kilonova detected in coincidence \citep{CoFo2017,SmCh2017,AbEA2017f}. 
 This work is the culmination of significant effort expended in the search for the electromagnetic counterpart of the gravitational waves found by compact binary black hole systems \citep{AbEA2016a,AbEA2016g,AbEA2017} (please see \cite{AbEA2016b} for an overview of the search for an electromagnetic counterpart to GW150914).
 
-There has been significant optimism for the potential electromagnetic counterparts for emission from binary neutron star and black hole - neutron star systems across timescales and wavelengths \citep{Nakar2007,MeBe2012}. 
+There has been significant optimism for the potential electromagnetic counterparts \sout{for emission} from binary neutron star {\color{green}(BNS)} and neutron star - black hole {\color{green}(NSBH)} systems across timescales and wavelengths \citep{Nakar2007,MeBe2012}. 
 A  kilonova, arising from sub-relativistic ejecta, in particular has bolometric luminosities of $\approx 10^{40}-10^{42}$\,ergs/s \citep{MeBa2015,BaKa2013} (GW170817 peaked at $\approx 10^{42}$\,ergs/s \citep{SmCh2017})
-and color and durations dependent on the physical conditions of the merger \citep{MeMa2010,KaBa2013,BaKa2013,TaHo2013,KaFe2015,BaKa2016,Me2017}.
+and color and durations dependent on the physical conditions of the merger \citep{MeMa2010,KaBa2013,BaKa2013,TaHo2013,KaFe2015,BaKa2016,Me2017}.{\color{red} This sentence seems a little disconnected from the previous one. Maybe put a colon after previous sentence and combine into single sentence}
 
 The scientific output from a joint gravitational-wave and electromagnetic observation is significant, as the detection of a kilonova coincident with a gravitational wave allows for the exploration of the neutron star equation of state \citep{BaBa2013} and r-process nucleosynthesis in the unbound ejecta from a merger involving a neutron star \citep{MeBa2015,JuBa2015,RoLi2017,WuFe2016}.
 The gravitational-wave posteriors alone allow for estimates of the contribution of dynamical ejecta to the optical counterpart \cite{AbEA2017g}.
@@ -135,15 +135,17 @@ Among others, \cite{SmCh2017} use photometry of GW170817 to place constraints on
 The identification of the host galaxy allows for a distance-ladder independent measurement of the Hubble Constant \citep{AbEA2017h}.
 In addition, the joint observation with a short gamma-ray burst confirms these phenomena are driven by compact binary mergers, but also allow for the study of their beaming, energetics, and galactic environment \citep{MeBe2012}.
 
-To facilitate the detection of gravitational-wave counterparts, probability skymaps as a function of sky direction and distance are released for gravitational wave triggers produced by the detectors \citep{SiPr2014,BeMa2015}. 
+To facilitate the detection of gravitational-wave counterparts, probability skymaps as a function of sky direction and distance are released for gravitational wave triggers produced by the detectors \citep{SiPr2014,BeMa2015}.\textcolor{red}{ Maybe cite Going the distance paper since that has the details of how distance is incorporated} 
 Due to the significant sky coverage required to observe the gravitational-wave sky localization regions, usually spanning $\approx 100\,\textrm{deg}^2$, techniques to optimize the followup efforts are of significant utility \citep{Fair2009,Fair2011,Grover:2013,WeCh2010,SiAy2014,SiPr2014,BeMa2015,EsVi2015,CoLi2015,KlVe2016}.
 Given the large sky localization regions involved, wide-field survey telescopes have the best opportunities to make a detection. 
 The Panoramic Survey Telescope and Rapid Response System (Pan-STARRS) \citep{MoKa2012}, Asteroid Terrestrial-impact Last Alert System (ATLAS) \citep{Ton2011}, the intermediate Palomar Transient Factory (PTF) \citep{RaSh2009} and (what will become) the Zwicky Transient Facility (ZTF), BlackGEM \citep{BlGr2015} and the Large Synoptic Survey Telescope (LSST) \citep{Ivezic2014} are all examples of such systems.
 For example, Pan-STARRS has a 7$\textrm{deg}^2$ field of view (FOV), achieving a 5 $\sigma$ limit of 21.5 (AB mag) in the i band in a 45 second exposure. ATLAS has a 29.2$\textrm{deg}^2$ field of view, achieving a 5 $\sigma$ limit of 18.7 in the cyan band in a 30 second exposure. For comparison, LSST will have a $9.6\textrm{deg}^2$ FOV and will require a 21\,s r-band exposure length to reach 22 mag.
 
-Due to the significant difference in telescope configurations, including FOV, filter, typical exposure times, and limiting magnitudes, in addition to placement on the earth and therefore different seeing and sky conditions, optimizing gravitational wave followups for generic telescopes is difficult. Therefore, in the following, we will take the telescopes mentioned above as examples.
-For this reason, we have created a codebase named \emph{gwemopt} (Gravitational Wave - Electromagnetic OPTimization) that utilizes methods from a variety of recent papers geared towards optimizing efforts of followup. We employ methods to read gravitational-wave skymaps and the associated information made available from GraceDB \footnote{https://gracedb.ligo.org} \citep{AbEA2016b}, in addition to information about the telescopes to tile the sky, allocate available telescope time to the chosen fields, and schedule that time in a way that optimizes based on expected lightcurves.
-We will describe algorithms that use the gravitational-wave probability skymaps (some of them 2D only, some of them 3D as well), to perform optimizations.
+Due to the significant difference in telescope configurations, including FOV, filter, typical exposure times, and limiting magnitudes, in addition to placement on the earth and therefore different seeing and sky conditions, optimizing gravitational wave followups for generic telescopes is difficult. \sout{Therefore}, in the following, we will take the telescopes mentioned above as examples.
+For this reason, we have created a codebase named \emph{gwemopt} (Gravitational Wave - Electromagnetic OPTimization) that utilizes methods from a variety of recent papers geared towards optimizing efforts of followup. We employ methods to read gravitational-wave skymaps and the associated information made available from GraceDB \textcolor{red}{Maybe expand here itself (first appearance)}
+\footnote{https://gracedb.ligo.org} \citep{AbEA2016b}, in addition to information about the telescopes to tile the sky, allocate available telescope time to the chosen fields, and schedule that time in a way that optimizes based on expected lightcurves.
+\textcolor{red}{ Using \textbf{therefore} and \textbf{for this reason} in back to back sentences could be avoided. I think removing the \textbf{therefore} doesn't depreciate the meaning}
+We will describe algorithms that use the gravitational-wave probability skymaps (some of them 2D only, some of them 3D as well)\textcolor{red}{ Okay if we have examples from O1. But in O2 skymaps were all 3D }, to perform optimizations.
 In section~\ref{sec:algorithm}, we describe the algorithm.
 In section~\ref{sec:performance}, we describe the performance of the algorithms.
 In section~\ref{sec:conclusions}, we offer concluding remarks and suggest directions for future research.
@@ -151,8 +153,8 @@ In section~\ref{sec:conclusions}, we offer concluding remarks and suggest direct
 \section{Algorithm}
 \label{sec:algorithm}
 
-Figure~\ref{fig:flowchart} shows the flowchart for the \emph{gwemopt} pipeline, developed to optimize the efforts of electromagnetic followup of gravitational-wave events.  \emph{gwemopt} is developed in python, which has the benefit of interfaces to both LIGO's gravitational-wave candidate event database (GraceDB) and HEALPix \citep{GoHi2005}, the format in which LIGO reports skymaps. The general sequence of the pipeline is as follows. Skymaps are ingested from 
-In the following, we will show the command line syntaxes required to reproduce the results at the beginning of each section.
+Figure~\ref{fig:flowchart} shows the flowchart for the \emph{gwemopt} pipeline, developed to optimize the efforts of electromagnetic followup of gravitational-wave events.  \emph{gwemopt} is developed in python,\textcolor{red}{ Maybe like texttt{python}} which has the benefit of interfaces to both LIGO's gravitational-wave candidate event database (GraceDB) and HEALPix \textcolor{red}{Expand Healpix} \citep{GoHi2005}, the format in which LIGO reports skymaps. The general sequence of the pipeline is as follows. \textcolor{red}{Following statement sounds gramatically incorrect} \textbf{Skymaps are ingested from 
+In the following, we will show the command line syntaxes required to reproduce the results at the beginning of each section.}
 
 \emph{gwemopt} uses events provided by GraceDB in addition to information about the telescopes for creating tiles and optimize time allocations in the fields.
 It uses information about potential lightcurves from electromagnetic counterparts to schedule the available telescope time.
@@ -208,7 +210,7 @@ By way of an outline of the the algorithm to be discussed, the subsections in th
 \begin{figure}[t]
 \hspace*{-0.5cm}
 \centering
-\includegraphics[width=3in]{prob.pdf}
+\includegraphics[width=3in]{plots/prob.pdf}
 \caption{The gravitational-wave likelihood $L_\textrm{GW}(\alpha,\delta,R)$ for GW170104.}
  \label{fig:skymap}
  \end{figure}
@@ -323,15 +325,15 @@ This defines the available segments.
 The time available for the analysis is then determined from these segments.
 This assumes implicitly that the electromagnetic counterpart has not faded beyond detection limits in the time available. Some of the time allocation algorithms below will use models to determine when the counterpart is expected to be too faint to be detectable.
 
-There are four options related to time allocations as a function of sky location available, powerlaw, WAW (Where and when), PEM (Probability of electomagnetic counterpart), and coverage. Figure~\ref{fig:timealloc} shows examples of the powerlaw, WAW, and PEM types.
-
+There are four options related to time allocations as a function of sky location available, \textbf{powerlaw, WAW (Where and when), PEM (Probability of electomagnetic counterpart), and coverage.} Figure~\ref{fig:timealloc} shows examples of the powerlaw, WAW, and PEM types.
+\textcolor{red}{Maybe mention in the same sequence as they are described below}
 \emph{Coverage.} The ``coverage'' option is one whereby coverage from existing surveys, including the right ascension and declination of the pointing and the limiting magnitude, are used. The benefit of this mode is to establish efficiencies of detection of kilonovae in existing surveys. For example, this code will be used to determine the efficiencies of the Pan-STARRS and ATLAS surveys to both gravitational-wave and gamma-ray burst triggers. It can be used as a way to prioritize examination of survey data for serendipitous observations of these transients, where both reference images and the time of the transients are known.
 
 \emph{Powerlaw.} The ``powerlaw'' option is one where scaling relations are applied to the probability map to determine the time allocation.
 Many authors \citep{GhBl2016,CoSt2016a,ChHu2017} have proposed a variation on simply scaling the time allocation proportional to the probability skymaps, a technique employed in the Powerlaw method below.
 Pan-STARRS and ATLAS based searches have employed this technique \citep{SmCh2016,SmCh2016b,StTo2017}.
-\cite{CoSt2016a} derived scaling relations for the time allocated to any given field, $t_i$, given the graviational-wave likelihood. We showed that under certain assumptions, $t_i \propto \left(\frac{L_\textrm{GW}(\alpha_i,\delta_i)}{a(\alpha_i,\delta_i)}\right)^{2/3}$, where $\alpha_i$ is the right ascension, $\delta_i$ is the declination, $L_\textrm{GW}(\alpha_i,\delta_i)$ is the gravitational-wave likelihood and $a(\alpha_i,\delta_i)$ is Galactic extinction.  While the powerlaw based analysis is straightforward, it does not account for the fact that the telescope must be sensitive enough to detect the counterpart. In this sense, this algorithm is the least model dependent. Although the detectability is model-dependent, both in the distances returned by the gravitational-wave detectors and the absolute magnitude of the sources, the following algorithms account for this in multiple ways.
-
+\cite{CoSt2016a} derived scaling relations for the time allocated to any given field, $t_i$, given the graviational-wave likelihood. \textbf{We showed}\textcolor{red}{Is this Coughlin and Stubbs?} that under certain assumptions, $t_i \propto \left(\frac{L_\textrm{GW}(\alpha_i,\delta_i)}{a(\alpha_i,\delta_i)}\right)^{2/3}$, where $\alpha_i$ is the right ascension, $\delta_i$ is the declination, $L_\textrm{GW}(\alpha_i,\delta_i)$ is the gravitational-wave likelihood and $a(\alpha_i,\delta_i)$ is Galactic extinction.  While the powerlaw based analysis is straightforward, it does not account for the fact that the telescope must be sensitive enough to detect the counterpart. In this sense, this algorithm is the least model dependent. Although the detectability is model-dependent, both in the distances returned by the gravitational-wave detectors and the absolute magnitude of the sources, the following algorithms account for this in multiple ways.
+\textcolor{red}{I am confused about whether it is Eq.(2) we are trying to maximize or saying t $\propto (\dots)^{2/3}$}
 The \emph{Powerlaw} algorithm optimizes the probability of detecting the transient with N observations, which is simply the sum of the probability of each observation. The expression is shown in Eq.\ref{eqn:powerlaw}:
 \begin{equation}\label{eqn:powerlaw}
 p_{tot}=\Sigma_{i=1}^N \frac{M_i}{M_{tot}}\frac{L_{GW}(\alpha_i, \delta_i, R_i)}{L_{GW_tot}}\frac{F_i(t_i)}{a(\alpha_i, \delta_i)},
