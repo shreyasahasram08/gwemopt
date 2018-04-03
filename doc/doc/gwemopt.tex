@@ -258,7 +258,7 @@ Table~\ref{table:config} provides the information assumed for these telescopes.\
 python gwemopt_run --doEvent --do3D --doTiles --doPlots --tilesType ranked
 \end{lstlisting}
 Once a telescope configuration has been determined, the next step of the analysis is to generate the sky-map tiling.
-There are a variety of algorithms in the literature for sky-map tiling, and the ones implemented in \emph{gwemopt} will be detailed below. The idea is to cover the sky with tiles the size of the telescope's field-of-view with minimal overlap. In some cases, these tiles are pre-determined by survey constraints in order to simplify difference imaging. In other cases, it is possible to optimize the tile locations based on the gravitational-wave skymaps, such that the tiles maximize the probability contained. In the following, we will check the difference between these tile locations to determine their effect. Due to the fields-of-view for these telescopes being in general much smaller than the probability region, the effect is expected to be relatively minimal (i.e. the number of tiles chosen to allocate time to will be dominated by choices such as whether there is utility in filling in chip gaps and thereby having overlapping tiles, as opposed to simply maximizing the probability contained).
+There are a variety of algorithms in the literature for sky-map tiling, and the ones implemented in \emph{gwemopt} \sout{will be}\textcolor{red}{are} detailed below. The idea is to cover the sky with tiles the size of the telescope's \sout{field-of-view}\textcolor{red}{FOV} with minimal overlap. In some cases, these tiles are pre-determined by survey constraints in order to simplify difference imaging. In other cases, it is possible to optimize the tile locations based on the gravitational-wave skymaps, such that the tiles maximize the probability contained. In the following, we will check the difference between these tile locations to determine their effect. Due to the \sout{fields-of-view}\textcolor{red}{FOV} for these telescopes being in general much smaller than the probability region, the effect is expected to be relatively minimal (i.e. the number of tiles chosen to allocate time to will be dominated by choices such as whether there is utility in filling in chip gaps and thereby having overlapping tiles, as opposed to simply maximizing the probability contained).
 
 \begin{figure*}
     \centering
@@ -268,7 +268,9 @@ There are a variety of algorithms in the literature for sky-map tiling, and the 
     \includegraphics[width=3in]{tiling_moc}
     \includegraphics[width=3in]{tiling_ranked} \\
     MOC \hspace{2.6in}Ranked
-    \caption{Example outputs of different tiling algorithms. On the top left is the greedy version with $N_{\rm tiles}$ = 10, where $N_{\rm tiles}$ is the number of tiles employed, on the top right is the hierarchical version with the same, on the bottom left is the MOC skymap, and on the bottom right is the ranked skymap tiling.}
+	\caption{Example outputs of different tiling algorithms. On the top left is the greedy version with $N_{\rm tiles}$ = 10, where $N_{\rm tiles}$ is the number of tiles employed, on the top right is the hierarchical version with the same, on the bottom left is the MOC skymap, and on the bottom right is the ranked skymap tiling.\textcolor{red}{Maybe the caption should be
+	more descriptive, in the sense of describing how the results look different for the various strategies. For example the MOC and Ranked plots look similar.}
+	}
     \label{fig:tiling}
 \end{figure*}
 
@@ -276,7 +278,7 @@ Gravitational-wave skymaps in general contain metrics that report the spatial pr
 They are composed of HEALPix arrays that encode either the 2D probability, in right ascension and declination, or 3D probability, which includes probability distributions for the distance.
 They are reported in maps with a particular number of pixels, usually $\textrm{N}_\textrm{side} = 512$. 
 This can introduce quantization errors, especially for small field-of-view telescopes. 
-The --nside flag allows for the up-sampling and down-sampling of the skymaps in the analysis.
+The \texttt{--nside} flag allows for the up-sampling and down-sampling of the skymaps in the analysis.
 
 There are four options related to skymap tiling currently available and defined below: MOC (multi-order coverage), ranked, hierarchical and greedy.
 In the following, we will summarize the key features of each implementation, and referring the reader to the literature for further details.
@@ -284,16 +286,20 @@ The goal is to place each algorithm in the same mathematical formalism for strai
 
 \emph{MOC}. The ``MOC'' tiling scheme, based on the multi-order coverage of HEALPix maps, hierarchically predefines cells in order to specify arbitrary sky regions \citep{FeBo2014}. 
 MOC is proposed in order to provide ``fast set operations'' between regions on the sky, which are designed to minimize computational time for standard set operations (unions, intersections, etc.). In MOC, the spherical sky is recursively divided into 4 regions and each region is a diamond. 
-The sphere is divided recursively into four diamonds. 
+\sout{The sphere is divided recursively into four diamonds.}\textcolor{red}{Mentioned in previous line itself}
 The division stops according to the resolution necessary for a particular usage.
-MOC is particularly useful in the case that most information is contained in just a handful of pixels, and therefore it is desired to save that information at high resolution for those pixels, and the remainder of the map at low resolution.
+\textbf{MOC is particularly useful in the case that most information is contained in just a handful of pixels, and therefore it is desired to save that information at high resolution for those pixels, and the remainder of the map at low resolution.}\textcolor{red}{Maybe the reason for this should be mentioned. It seems a natural follow-up question}
 
-Here are three relevant implementation details about MOC.
+Here are three relevant implementation details about MOC.\textcolor{red}{The points below seem a bit incomplete to me. Specifically, after the division is performed, the way we get the
+preferred set of tiles, is unclear to me. Am I missing something obvious?}
 \begin{itemize}
 \item MOC uses an equatorial coordinate system. 
 \item MOC divides the sphere recursively into four diamonds. 
 \item MOC indexes each tile as follows: the initial tile is numbered 0 on level 0. Then, when divided, we get tile indices of 0, 1, 2, 3 on level 1. More generally, if we start from a tile numbered M, its children will be numbered $M\times 4$, $M\times 4 + 1$, $M\times 4 + 2$,$M\times 4 + 3$ on the next level.
 \end{itemize}
+
+\textcolor{red}{It may be useful to refer to specific figures from papers corresponding to each strategy below
+that give a visual idea of how the tiling is done. For example, for Ranked Tiling it is Fig 2. in Ghosh et. al.}
 
 \emph{ranked}. The ranked tiling scheme, described in \cite{GhBl2016}, use pre-defined sky cells. This tiling scheme is also based on a grid system with grids of equal sizes such as the one used by MOC. The sizes of the grids are the same as the size of the telescope FOV. For each tile in the grid at $(\alpha_i, \delta_i)$, we calculate a double integral that accumulates the probability distribution in this tile, shown in Eq.\ref{eqn:tile_ranked},
 \begin{equation}\label{eqn:tile_ranked}
@@ -312,18 +318,23 @@ In the following, we will take 95\% as our target integrated probability, which 
 \begin{lstlisting}
 python gwemopt_run --doEvent --doPlots --doTiles --doSchedule --timeallocationType coverage
 \end{lstlisting}
-Once the tile locations have been assigned, whether dynamically or having been fixed previously, the next task is to assign time allocations to each tile, based on a variety of metrics. 
-Because telescopes have fields of view that are in general significantly smaller than the probability region and typical exposure times for these telescopes are of order minutes (see Table~\ref{table:config}), it is not possible to image the entire probability region to interesting limiting magnitudes in a reasonable amount of time.
+\sout{Once the tile locations have been assigned, whether dynamically or having been fixed previously, the next task is to assign time allocations to each tile, based on a variety of metrics.}
+\textcolor{red}{Maybe re-write as:}\textbf{Having decided on the preferred set of tiles, exposure time allocation forms the next important constraint to address.}
+\textbf{This is }because telescopes have fields of view that are, in general, \sout{significantly} \textcolor{red}{I would omit ``significantly''  after GW170817, for which HLV localization was ~30 degs} smaller than the probability region and typical exposure times for these telescopes are of order minutes (see Table~\ref{table:config}). 
+It is, \textbf{therefore}, not possible to image the entire probability region to interesting limiting magnitudes in a reasonable amount of time.
 There are further constraints that arise from the diurnal cycle, observing time available for followup, limitations on the pointing a particular telescope is capable of, and the rising and setting of tiles.
 The following algorithms use a variety of methods to optimize the probability of imaging a counterpart with the constraint of limited telescope resources.
 
 The amount of time allocated is defined with a few constraints. 
 First of all, time segments are generated based on the observing time allocated after the gravitational-wave event. 
-In the following analyses, the default will be to assume the following 3 days are available.
+In the following analyses, \sout{the default}
+\textcolor{red}{If any other time period is not considered, no need to write this, sentence also needs to be modified then} will be to assume the following 3 days are available.
 The segments are then intersected with night time at the site of the particular telescope.
 This defines the available segments. 
 The time available for the analysis is then determined from these segments.
-This assumes implicitly that the electromagnetic counterpart has not faded beyond detection limits in the time available. Some of the time allocation algorithms below will use models to determine when the counterpart is expected to be too faint to be detectable.
+This assumes implicitly that the electromagnetic counterpart has not faded beyond detection limits in the time available. 
+Some of the time allocation algorithms below \sout{will} use models to determine \sout{when the counterpart is expected to be too faint to be detectable.}
+\textcolor{red}{Instead:}\textbf{ the detectability of the lightcurve}
 
 There are four options related to time allocations as a function of sky location available, \textbf{powerlaw, WAW (Where and when), PEM (Probability of electomagnetic counterpart), and coverage.} Figure~\ref{fig:timealloc} shows examples of the powerlaw, WAW, and PEM types.
 \textcolor{red}{Maybe mention in the same sequence as they are described below}
@@ -389,7 +400,11 @@ where $\omega_i$ is the probability density; $\tau_i$ is the time allocated and 
     PEM\hspace{2.6in}Powerlaw\\
     \includegraphics[width=3in]{plots/coverage_waw.pdf}\\
     WAW
-    \caption{Example outputs of different time allocation algorithms. On the top left is the tiles coverage with the PEM algorithm. On the top right is the tiles coverage with the Powerlaw algorithm. On the bottom is the tiles coverage with the WAW algorithm. In generating all of the plots, MOC algorithm is used.}
+    \caption{Example outputs of different time allocation algorithms. On the top left is the tiles coverage with the PEM algorithm. On the top right is the tiles coverage with the Powerlaw algorithm. On the bottom is the tiles coverage with the WAW algorithm. In generating all of the plots, MOC algorithm is used.
+	\textcolor{red}{There should be a colorbar going with the plots to show the exposure times. 
+	Without that the plot is not conveying the information it should. Also, if possible, there 
+	should be comparison between the times, if at all there are differences and why}
+    }
     \label{fig:timealloc}
 \end{figure*}
 
@@ -411,6 +426,8 @@ To account for lunar sky brightness, we use a model from \cite{CoSt2016b}.
 Any tile whose sky brightness is increased by at least 1\,mag is excluded.
 
 There are three options related to scheduling observations, greedy, sear, and weighted.
+\textcolor{red}{Maybe introduce new paragraph}
+
 \emph{Greedy.} The ``greedy'' algorithm, which is the simplest version in the codebase, employs a schedule on the basis of probability contained. The idea is that higher ranked tiles are observed before lower ranked tiles based on this ranking scheme. \cite{RaSi2017} implemented a greedy algorithm whereby the field with the highest probability region in a given time window is observed. As this analysis did not include the possibility of multiple exposures for each pointing, it is modified in the analysis to include multiple exposures. The algorithm is as follows:
 
 \begin{enumerate}
@@ -438,7 +455,7 @@ We can see that either way, $S_2$ will have two elements.
 
 Given the impossibility of necessarily observing all of the tiles as they rise and set 
 is given a weight. 
-Therefore we define the weights $w_i$ as
+\sout{Therefore} we define the weights $w_i$ as
 \begin{equation}
 w_i = L_\textrm{GW}(\alpha_i,\delta_i) \times \frac{N_\textrm{R}}{N_\textrm{A}} 
 \end{equation}
@@ -462,7 +479,7 @@ The transients are injected proportional to the values in the sky localization p
 We provide example lightcurves for a variety of lightcurve models, including:
 
 \begin{enumerate}
-\item \cite{TaHo2014}: Simulations of binary systems showing ejecta morphology and resulting lightcurves. These simulations led to analytical models for black-hole neutron star systems from \cite{KaKy2016} and\cite{DiUj2017}.
+\item \cite{TaHo2014}: Simulations of binary systems showing ejecta morphology and resulting lightcurves. These simulations led to analytical models for black-hole neutron star systems from \cite{KaKy2016} and \cite{DiUj2017}.
 \item \cite{KaKy2016}: Analytical models for black-hole neutron star systems based on \cite{TaHo2014}
 \item \cite{DiUj2017}: Analytical models for binary neutron star systems based on \cite{TaHo2014}
 \item \cite{BaKa2016}: Simulations of binary systems studying the emission profiles of radioactive decay products from the merger.
@@ -491,7 +508,10 @@ We will focus on the model by \cite{Me2017} to compare the efficiency. All the e
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.5\textwidth]{plots/eff_ex.png}
-\caption{Example plot of efficiency for \cite{Me2017} injections, comparing the scheduling algorithms. Greedy algorithm is used for tiling and PEM algorithm is used for time allocation. Greedy and SEAR have similar performance in long distance and both are better than weighted. This difference is also reflected in Figure~\ref{fig:eff_metric}. As the algorithm accounts for observability from a site, including both whether tiles are visible from the site of interest as well as diurnal effects, efficiencies are expected to peak at around 25\% for an event which fades quickly and has a probability region with peaks in both the north and south.}
+\caption{Example plot of efficiency for \cite{Me2017} injections, comparing the scheduling algorithms. Greedy algorithm is used for tiling and PEM algorithm is used for time allocation. Greedy and SEAR have similar performance in long distance and both are better than weighted. This difference is also reflected in Figure~\ref{fig:eff_metric}. As the algorithm accounts for observability from a site, including both whether tiles are visible from the site of interest as well as diurnal effects, efficiencies are expected to peak at around 25\% for an event which fades quickly and has a probability region with peaks in both the north and south.
+	\textcolor{red}{Maybe mention in the caption (as in the text) that the constraint was 
+	on total observing time giving value of the same for this plot.}
+}
 \label{fig:eff_ex}
 \end{figure}
 In Figure~\ref{fig:eff_ex}, we show an example where we hold the tiling and time allocation algorithms fixed (to disentangle their effects from the scheduling algorithm), and show the efficiency as a function of distance for the scheduling algorithms discussed in this paper. We find that both Greedy and SEAR perform better than weighted at larger distances. Weighted performs best at the lowest distances considered because it optimizes purely for the highest probability tiles, ensuring that they will be scheduled for multiple exposures so as to meet the detection criteria. Greedy and SEAR, both of which schedule tiles to maximize the number of fields imaged, with SEAR accounting for the rising and setting of the tiles, perform significantly better at greater distances. This is because they sacrifice some efficiency for nearby sources by effectively exploring more fields, but have a more constant detection efficiency with distance.
@@ -501,7 +521,9 @@ In order to compare the 36 efficiencies as plotted in Figure~\ref{fig:eff_ex}, w
 \subsection{Performance and algorithms}
 \begin{figure}[t]
 \includegraphics[width=0.45\textwidth]{plots/efficiency.png}
-\caption{Plot of the efficiency metric for each of the 36 options. On the horizontal axis are tiling algorithms and scheduling algorithms and on the vertical axis are the time allocation algorithms. Abbreviations are used for the algorithms. The first capital letter stands for the tiling algorithm and the second letter stands for the scheduling algorithm. The abbreviations are the first letters of the algorithms: G - greedy. H - hierarchical. M - MOC. R - ranked. S - SEAR. W - weighted. The grids are colors such that highest efficiency combinations are darker and lower efficiency ones are lighter, with the highest being completely blue and the lowest one being completely white.}
+	\caption{Plot of the efficiency metric for each of the 36 options. On the horizontal axis are tiling algorithms and scheduling algorithms and on the vertical axis are the time allocation algorithms. Abbreviations are used for the algorithms. The first capital letter stands for the tiling algorithm and the second letter stands for the scheduling algorithm. The abbreviations are the first letters of the algorithms: G - greedy. H - hierarchical. M - MOC. R - ranked. S - SEAR. W - weighted. The grids are colors such that highest efficiency combinations are darker and lower efficiency ones are lighter, with the highest being completely blue and the lowest one being completely white.
+	\textcolor{red}{Are the values in the cells the \% efficiency? If so, that could be mentioned
+	in the caption.}}
 \label{fig:eff_metric}
 \centering
 \end{figure}
